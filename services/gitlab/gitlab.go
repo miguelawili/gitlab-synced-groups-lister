@@ -1,7 +1,6 @@
 package gitlab
 
 import (
-	"bytes"
 	"encoding/csv"
 	"encoding/json"
 	"io/ioutil"
@@ -140,7 +139,7 @@ func buildQueries(pagination string, perPage string, orderBy string, sort string
 	return queries
 }
 
-func GetSyncedGroups(baseUrl string, apiVersion string, token string, outputFileName string) (csvContent string) {
+func GetSyncedGroups(baseUrl string, apiVersion string, token string, outputFileName string) [][]string {
 	headers := buildHeaders(token)
 	queries := buildQueries(
 		"keyset",
@@ -225,14 +224,12 @@ func GetSyncedGroups(baseUrl string, apiVersion string, token string, outputFile
 		logger.Log().Infof("%s", record)
 	}
 
-	buf := new(bytes.Buffer)
-	stringWriter := csv.NewWriter(buf)
+	fileWriter := csv.NewWriter(csvFile)
 
-	err = stringWriter.WriteAll(records)
+	err = fileWriter.WriteAll(records)
 	if err != nil {
 		logger.Log().Fatal(err)
 	}
-	csvContent = buf.String()
 
-	return csvContent
+	return records
 }

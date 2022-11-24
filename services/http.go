@@ -1,6 +1,7 @@
 package services
 
 import (
+	"bytes"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -23,7 +24,7 @@ func NewHttpService(url string) *HTTPService {
 	}
 }
 
-func ConstructRequest(requestMethod string, baseUrl string, headers []Header, queries []Query) *http.Request {
+func ConstructRequest(requestMethod string, baseUrl string, headers []Header, queries []Query, body []byte) *http.Request {
 	requestUrl, err := url.Parse(baseUrl)
 	if err != nil {
 		logger.Log().Fatal(err)
@@ -37,7 +38,13 @@ func ConstructRequest(requestMethod string, baseUrl string, headers []Header, qu
 		requestUrl.RawQuery = q.Encode()
 	}
 
-	req, err := http.NewRequest(requestMethod, requestUrl.String(), nil)
+	var reqBody *bytes.Buffer
+	if body == nil {
+		reqBody = nil
+	}
+	reqBody = bytes.NewBuffer(body)
+
+	req, err := http.NewRequest(requestMethod, requestUrl.String(), reqBody)
 	if err != nil {
 		logger.Log().Fatal(err)
 	}

@@ -74,7 +74,7 @@ func InitLogger(config string) {
 	if loadConfig(config) {
 		logrus.SetLevel(logLevel)
 		logrus.SetOutput(os.Stdout)
-		//logrus.SetFormatter(&logrus.JSONFormatter{})
+		logrus.SetFormatter(&logrus.JSONFormatter{})
 		Log().Info("Successfully initialized logger.")
 	}
 }

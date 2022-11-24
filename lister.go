@@ -21,10 +21,10 @@ func main() {
 	gitlabApiVersion := conf.Gitlab.ApiVersion
 	gitlabToken := conf.Gitlab.Token
 
-	csvContent := gitlab.GetSyncedGroups(gitlabBaseUrl, gitlabApiVersion, gitlabToken, outputFileName)
+	records := gitlab.GetSyncedGroups(gitlabBaseUrl, gitlabApiVersion, gitlabToken, outputFileName)
 
-	if csvContent == "" {
-		logger.Log().Fatal("CSV content is empty!")
+	if len(records) < 1 {
+		logger.Log().Fatal("records empty!")
 	}
 
 	// Confluence
@@ -54,24 +54,23 @@ func main() {
 		},
 		conf.Confluence.PageId,
 	)
-	currentVersion := content.Version.Number
+	logger.Log().Debugf("content:\n%+v", content)
 
 	confluenceService.UpdatePageContent(
-		[]services.Header{},
-		[]services.Query{
+		[]services.Header{
 			{
-				Key:   "limit",
-				Value: strconv.Itoa(2),
+				Key:   "Content-Type",
+				Value: "application/json",
 			},
 			{
-				Key:   "expand",
-				Value: "version,body.storage,space",
+				Key:   "User-Agent",
+				Value: "gitlab-synced-groups-lister/1.0",
 			},
 		},
+		[]services.Query{},
 		conf.Confluence.PageId,
-		currentVersion+1,
-		csvContent,
+		content.Title,
+		content.Version.Number,
+		records,
 	)
-
-	logger.Log().Debugf("content:\n%+v", content)
 }
