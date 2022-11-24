@@ -77,6 +77,7 @@ func (c *Confluence) UpdatePageContent(headers []services.Header, queries []serv
 	res, err := c.service.Client.Do(req)
 	if err != nil && res.StatusCode != 200 {
 		logger.Log().Errorf("ERR:\n%v")
+		return false
 	}
 
 	_, resBody := services.ParseHttpResponse(res)
