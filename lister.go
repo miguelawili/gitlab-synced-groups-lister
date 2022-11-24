@@ -56,7 +56,7 @@ func main() {
 	)
 	logger.Log().Debugf("content:\n%+v", content)
 
-	confluenceService.UpdatePageContent(
+	if confluenceService.UpdatePageContent(
 		[]services.Header{
 			{
 				Key:   "Content-Type",
@@ -72,5 +72,7 @@ func main() {
 		content.Title,
 		content.Version.Number,
 		records,
-	)
+	) {
+		logger.Log().Infof("Successfully updated Confluence page for %s!", content.Title)
+	}
 }
