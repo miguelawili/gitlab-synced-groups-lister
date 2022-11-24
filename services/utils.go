@@ -16,15 +16,18 @@ func CsvToHtmlTable(data [][]string) string {
 
 	sb.WriteString("<table>")
 	sb.WriteString("<tr>")
-	sb.WriteString("<th>Gitlab Group</th>")
-	sb.WriteString("<th>LDAP Group Links</th>")
+	// sb.WriteString("<th><center><strong>Gitlab Group</strong></center></th>")
+	sb.WriteString("<th><p style=\"text-align: center;\"><strong>Gitlab Group</strong></p></th>")
+	sb.WriteString("<th><p style=\"text-align: center;\"><strong>LDAP Group Links</strong></p></th>")
 	sb.WriteString("</tr>")
 	for _, line := range data {
 		sb.WriteString("<tr>")
 
 		var gitlabGroup string = line[0]
-		sb.WriteString("<td>")
+		sb.WriteString("<td data-highlight-colour=\"#fffae6\">")
+		sb.WriteString("<p>")
 		sb.WriteString(gitlabGroup)
+		sb.WriteString("</p>")
 		sb.WriteString("</td>")
 
 		if len(line) < 2 {
