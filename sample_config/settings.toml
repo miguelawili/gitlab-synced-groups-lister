@@ -1,0 +1,18 @@
+appName = "gitlab-synced-groups-lister"
+
+[logging]
+level = "info"
+
+[gitlab]
+token = ""
+url = ""
+apiVersion = "v4"
+
+[output]
+fileName = "ad_groups-to-gitlab_groups.csv"
+
+[confluence]
+url = ""
+user = ""
+token = ""
+pageId = ""
