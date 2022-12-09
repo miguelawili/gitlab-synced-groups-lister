@@ -199,9 +199,7 @@ func GetSyncedGroups(baseUrl string, apiVersion string, token string, outputFile
 	}
 	defer csvFile.Close()
 
-	records := [][]string{
-		{"gitlab_group", "ldap_group_links"},
-	}
+	records := [][]string{}
 
 	for _, entry := range responses {
 		fullPath := entry.FullPath
